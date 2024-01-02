@@ -1,4 +1,4 @@
-package edu.najah.cap.data.cloud_storage;
+package edu.najah.cap.data.data_exporting.cloud_storage;
 
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
@@ -81,7 +81,7 @@ public class UploadToDrive {
     public static Credential authorize() throws IOException {
         // Load client secrets.
         InputStream in =
-                UploadToDrive.class.getResourceAsStream("2.json");
+                UploadToDrive.class.getResourceAsStream("credentials.json");
         assert in != null;
         GoogleClientSecrets clientSecrets =
                 GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));

@@ -1,6 +1,6 @@
-package edu.najah.cap.data.compress;
+package edu.najah.cap.data.data_exporting.compress;
 
-import edu.najah.cap.data.helpers.DeletionHelper;
+import edu.najah.cap.data.data_exporting.helpers.DeletionHelper;
 
 import java.io.IOException;
 import java.nio.file.Files;

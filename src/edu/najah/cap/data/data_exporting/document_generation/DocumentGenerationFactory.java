@@ -1,6 +1,6 @@
-package edu.najah.cap.data.document_generation;
+package edu.najah.cap.data.data_exporting.document_generation;
 
-import edu.najah.cap.data.document_generation.strategy.*;
+import edu.najah.cap.data.data_exporting.document_generation.strategy.*;
 import edu.najah.cap.iam.UserType;
 
 public class DocumentGenerationFactory {

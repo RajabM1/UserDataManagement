@@ -1,4 +1,4 @@
-package edu.najah.cap.data.compress;
+package edu.najah.cap.data.data_exporting.compress;
 
 import java.io.IOException;
 import java.util.List;

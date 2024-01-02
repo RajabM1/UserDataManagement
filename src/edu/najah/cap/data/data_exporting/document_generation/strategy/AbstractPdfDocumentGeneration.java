@@ -1,10 +1,10 @@
-package edu.najah.cap.data.document_generation.strategy;
+package edu.najah.cap.data.data_exporting.document_generation.strategy;
 
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
-import edu.najah.cap.data.helpers.DeletionHelper;
-import edu.najah.cap.data.helpers.GetPathsHelper;
+import edu.najah.cap.data.data_exporting.helpers.DeletionHelper;
+import edu.najah.cap.data.data_exporting.helpers.GetPathsHelper;
 import edu.najah.cap.exceptions.BadRequestException;
 import edu.najah.cap.exceptions.NotFoundException;
 import edu.najah.cap.exceptions.SystemBusyException;

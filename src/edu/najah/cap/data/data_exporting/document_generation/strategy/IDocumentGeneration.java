@@ -1,4 +1,4 @@
-package edu.najah.cap.data.document_generation.strategy;
+package edu.najah.cap.data.data_exporting.document_generation.strategy;
 
 public interface IDocumentGeneration {
     /**
