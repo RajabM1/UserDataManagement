@@ -6,6 +6,11 @@ import ch.qos.logback.core.util.StatusPrinter;
 import org.slf4j.LoggerFactory;
 
 public class LoggerConfig {
+    /**
+     * Configures the logger using the Logback framework.
+     * The configuration file is expected to be in XML format.
+     *
+     */
     public static void setLoggerConfig(){
         LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
 

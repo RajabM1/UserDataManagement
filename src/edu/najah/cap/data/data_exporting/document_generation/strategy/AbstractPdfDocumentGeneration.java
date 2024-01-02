@@ -73,7 +73,7 @@ public abstract class AbstractPdfDocumentGeneration implements IDocumentGenerati
         if (!success) {
             logger.error("Failed to generate document for user: {} after {} attempts", userName, maxRetries);
             try {
-                DeletionHelper.delete(GetPathsHelper.getFilesPathsList());
+                DeletionHelper.delete(GetPathsHelper.getFilesPathsList(".pdf"));
             } catch (IOException ioException) {
                 logger.error("IO error during deleting pdf files: " + userName + " in " + getFileName(), ioException.getMessage());
             }

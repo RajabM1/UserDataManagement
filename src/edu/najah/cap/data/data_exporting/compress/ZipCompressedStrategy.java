@@ -11,6 +11,13 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 public class ZipCompressedStrategy implements ICompressStrategy {
+    /**
+     * Compresses the specified files into a ZIP archive.
+     *
+     * @param fileToCompress      The path to the ZIP archive file to be created.
+     * @param filesToBeCompressed The list of files to be included in the ZIP archive.
+     * @throws IOException If an I/O error occurs during the compression process.
+     */
     @Override
     public void compress(String fileToCompress, List<String> filesToBeCompressed) throws IOException {
         try (ZipOutputStream compressedFileOutputStream = new ZipOutputStream(Files.newOutputStream(Path.of(fileToCompress)))) {
