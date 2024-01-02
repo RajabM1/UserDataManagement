@@ -1,9 +1,6 @@
 package edu.najah.cap.data.document_generation;
 
 import edu.najah.cap.data.document_generation.strategy.IDocumentGeneration;
-import edu.najah.cap.exceptions.BadRequestException;
-import edu.najah.cap.exceptions.NotFoundException;
-import edu.najah.cap.exceptions.SystemBusyException;
 
 public class Generator {
     private final IDocumentGeneration userActivity;
@@ -12,7 +9,15 @@ public class Generator {
     private final IDocumentGeneration userPost;
     private final String userName;
 
-
+    /**
+     * Constructs a new Generator with specific strategies for generating documents.
+     *
+     * @param userName     The username associated with the documents to be generated.
+     * @param userActivity Strategy for generating user activity documents.
+     * @param userData     Strategy for generating user data documents.
+     * @param userPayment  Strategy for generating user payment documents.
+     * @param userPost     Strategy for generating user post documents.
+     */
     public Generator(String userName, IDocumentGeneration userActivity, IDocumentGeneration userData, IDocumentGeneration userPayment, IDocumentGeneration userPost) {
         this.userActivity = userActivity;
         this.userData = userData;
@@ -21,25 +26,37 @@ public class Generator {
         this.userName = userName;
     }
 
-    public final void generateUserActivity() throws SystemBusyException, BadRequestException, NotFoundException {
+    /**
+     * Generates a document detailing the user's activities.
+     */
+    public final void generateUserActivity() {
         if (userActivity != null) {
             userActivity.generateDocument(userName);
         }
     }
 
-    public final void generateUserData() throws SystemBusyException, NotFoundException, BadRequestException {
+    /**
+     * Generates a document containing the user's data.
+     */
+    public final void generateUserData() {
         if (userData != null) {
             userData.generateDocument(userName);
         }
     }
 
-    public final void generateUserPayment() throws SystemBusyException, BadRequestException, NotFoundException {
+    /**
+     * Generates a document with the user's payment information.
+     */
+    public final void generateUserPayment() {
         if (userPayment != null) {
             userPayment.generateDocument(userName);
         }
     }
 
-    public final void generateUserPost() throws SystemBusyException, BadRequestException, NotFoundException {
+    /**
+     * Generates a document with the user's posts.
+     */
+    public final void generateUserPost() {
         if (userPost != null) {
             userPost.generateDocument(userName);
         }

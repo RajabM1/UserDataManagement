@@ -1,7 +1,5 @@
 package edu.najah.cap.data.document_generation.strategy;
 
-import com.itextpdf.kernel.pdf.PdfDocument;
-import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Paragraph;
 import edu.najah.cap.activity.IUserActivityService;
@@ -10,34 +8,47 @@ import edu.najah.cap.activity.UserActivityService;
 import edu.najah.cap.exceptions.BadRequestException;
 import edu.najah.cap.exceptions.NotFoundException;
 import edu.najah.cap.exceptions.SystemBusyException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.util.List;
 
-public class PdfUserActivityGeneration implements IDocumentGeneration {
+public class PdfUserActivityGeneration extends AbstractPdfDocumentGeneration {
+    private static final Logger logger = LoggerFactory.getLogger(PdfUserActivityGeneration.class);
     private static final IUserActivityService userActivityService = new UserActivityService();
 
+    /**
+     * Adds user activity content to the PDF document.
+     *
+     * @param document The document to which user activity content is added.
+     * @param userName The username for whom the activity report is being generated.
+     * @throws SystemBusyException If the system is busy and cannot add content.
+     * @throws BadRequestException If the request parameters are invalid.
+     * @throws NotFoundException   If the user is not found.
+     */
     @Override
-    public void generateDocument(String userName) throws SystemBusyException, BadRequestException, NotFoundException {
+    protected void addContent(Document document, String userName) throws SystemBusyException, BadRequestException, NotFoundException {
+        logger.info("Starting to add user activity content for: {}", userName);
         List<UserActivity> userActivities = userActivityService.getUserActivity(userName);
-        String fileName = "storage\\UserActivity.pdf";
+        document.add(new Paragraph("User Activities Report \n"));
 
-        try (PdfWriter pdfWriter = new PdfWriter(fileName);
-             PdfDocument pdfDocument = new PdfDocument(pdfWriter);
-             Document document = new Document(pdfDocument)) {
-
-            document.add(new Paragraph("User Activities Report \n"));
-
-            for (UserActivity activity : userActivities) {
-                document.add(new Paragraph("Activity ID: " + activity.getId()));
-                document.add(new Paragraph("User ID: " + activity.getUserId()));
-                document.add(new Paragraph("Activity Type: " + activity.getActivityType()));
-                document.add(new Paragraph("Activity Date: " + activity.getActivityDate()));
-                document.add(new Paragraph("\n"));
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
+        for (UserActivity activity : userActivities) {
+            document.add(new Paragraph("Activity ID: " + activity.getId()));
+            document.add(new Paragraph("User ID: " + activity.getUserId()));
+            document.add(new Paragraph("Activity Type: " + activity.getActivityType()));
+            document.add(new Paragraph("Activity Date: " + activity.getActivityDate()));
+            document.add(new Paragraph("\n"));
         }
+        logger.info("User activity content added successfully for: {}", userName);
+    }
+
+    /**
+     * Provides the file name for the user activity PDF document.
+     *
+     * @return The file name for the generated user activity PDF document.
+     */
+    @Override
+    protected String getFileName() {
+        return "storage\\UserActivity.pdf";
     }
 }

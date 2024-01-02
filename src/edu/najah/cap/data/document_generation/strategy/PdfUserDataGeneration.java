@@ -1,7 +1,5 @@
 package edu.najah.cap.data.document_generation.strategy;
 
-import com.itextpdf.kernel.pdf.PdfDocument;
-import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Paragraph;
 import edu.najah.cap.exceptions.BadRequestException;
@@ -10,40 +8,52 @@ import edu.najah.cap.exceptions.SystemBusyException;
 import edu.najah.cap.iam.IUserService;
 import edu.najah.cap.iam.UserProfile;
 import edu.najah.cap.iam.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
+public class PdfUserDataGeneration extends AbstractPdfDocumentGeneration {
+    private static final Logger logger = LoggerFactory.getLogger(PdfUserDataGeneration.class);
 
-public class PdfUserDataGeneration implements IDocumentGeneration {
     private static final IUserService userService = new UserService();
 
-
+    /**
+     * Adds user data content to the PDF document.
+     *
+     * @param document The document to which user activity content is added.
+     * @param userName The username for whom the activity report is being generated.
+     * @throws SystemBusyException If the system is busy and cannot add content.
+     * @throws BadRequestException If the request parameters are invalid.
+     * @throws NotFoundException   If the user is not found.
+     */
     @Override
-    public void generateDocument(String userName) throws SystemBusyException, NotFoundException, BadRequestException {
+    protected void addContent(Document document, String userName) throws SystemBusyException, BadRequestException, NotFoundException {
+        logger.info("Starting to add user data content for {}", userName);
         UserProfile userProfile = userService.getUser(userName);
-        String filename = "storage\\UserData.pdf";
+        document.add(new Paragraph("User Data: \n"));
+        document.add(new Paragraph("Username: " + userProfile.getUserName()));
+        document.add(new Paragraph("First Name: " + userProfile.getFirstName()));
+        document.add(new Paragraph("Last Name: " + userProfile.getLastName()));
+        document.add(new Paragraph("Phone Number: " + userProfile.getPhoneNumber()));
+        document.add(new Paragraph("Email: " + userProfile.getEmail()));
+        document.add(new Paragraph("Role: " + userProfile.getRole()));
+        document.add(new Paragraph("Department: " + userProfile.getDepartment()));
+        document.add(new Paragraph("Organization: " + userProfile.getOrganization()));
+        document.add(new Paragraph("Country: " + userProfile.getCountry()));
+        document.add(new Paragraph("City: " + userProfile.getCity()));
+        document.add(new Paragraph("Street: " + userProfile.getStreet()));
+        document.add(new Paragraph("Postal Code: " + userProfile.getPostalCode()));
+        document.add(new Paragraph("Building: " + userProfile.getBuilding()));
+        document.add(new Paragraph("User Type: " + userProfile.getUserType()));
+        logger.info("User data content added successfully for {}", userName);
+    }
 
-        try (PdfWriter pdfWriter = new PdfWriter(filename);
-             PdfDocument pdfDocument = new PdfDocument(pdfWriter);
-             Document document = new Document(pdfDocument)) {
-
-            document.add(new Paragraph("User Data: \n"));
-            document.add(new Paragraph("Username: " + userProfile.getUserName()));
-            document.add(new Paragraph("First Name: " + userProfile.getFirstName()));
-            document.add(new Paragraph("Last Name: " + userProfile.getLastName()));
-            document.add(new Paragraph("Phone Number: " + userProfile.getPhoneNumber()));
-            document.add(new Paragraph("Email: " + userProfile.getEmail()));
-            document.add(new Paragraph("Role: " + userProfile.getRole()));
-            document.add(new Paragraph("Department: " + userProfile.getDepartment()));
-            document.add(new Paragraph("Organization: " + userProfile.getOrganization()));
-            document.add(new Paragraph("Country: " + userProfile.getCountry()));
-            document.add(new Paragraph("City: " + userProfile.getCity()));
-            document.add(new Paragraph("Street: " + userProfile.getStreet()));
-            document.add(new Paragraph("Postal Code: " + userProfile.getPostalCode()));
-            document.add(new Paragraph("Building: " + userProfile.getBuilding()));
-            document.add(new Paragraph("User Type: " + userProfile.getUserType()));
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    /**
+     * Provides the file name for the user data PDF document.
+     *
+     * @return The file name for the generated user activity PDF document.
+     */
+    @Override
+    protected String getFileName() {
+        return "storage\\UserData.pdf";
     }
 }
