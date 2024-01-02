@@ -1,6 +1,7 @@
 package edu.najah.cap.data.data_exporting.document_generation;
 
 import edu.najah.cap.data.data_exporting.document_generation.strategy.IDocumentGeneration;
+import edu.najah.cap.exceptions.NotFoundException;
 
 public class Generator {
     private final IDocumentGeneration userActivity;

@@ -32,32 +32,52 @@ public abstract class DataExportingTemplate {
      *
      * @param userName The username for which data is to be exported.
      */
-    public final void export(String userName)  {
+    public final void export(String userName) throws NotFoundException {
         generatePdf(userName);
         compressPdf();
         upload();
     }
 
-    protected void generatePdf(String userName) {
+    /**
+     * Generates a PDF document for a user.
+     *
+     * @param userName the username associated with the user to generate the PDF for.
+     * @throws NotFoundException if the user data is not found in the system after retries.
+     */
+    protected void generatePdf(String userName) throws NotFoundException {
         UserType userType = null;
+        boolean success = false;
+        int retryCount = 0;
+        int maxRetries = 3;
 
-        try {
-            userType = userService.getUser(userName).getUserType();
-        } catch (SystemBusyException systemBusyException) {
-            logger.error("System busy while get user data: " + userName, systemBusyException.getMessage());
-        } catch (BadRequestException badRequestException) {
-            logger.error("Bad request in get user service: " + userName, badRequestException.getMessage());
-        } catch (NotFoundException notFoundException) {
-            logger.error("Required resource not found in get user service: " + userName, notFoundException.getMessage());
-        } catch (Exception exception) {
-            logger.error("Unexpected error in get user data: " + userName, exception.getMessage());
+        while (!success && retryCount < maxRetries) {
+            try {
+                userType = userService.getUser(userName).getUserType();
+                success = true;
+            } catch (SystemBusyException systemBusyException) {
+                logger.error("System busy while get user data: " + userName, systemBusyException.getMessage());
+                retryCount++;
+            } catch (BadRequestException badRequestException) {
+                logger.error("Bad request in get user service: " + userName, badRequestException.getMessage());
+                break;
+            } catch (NotFoundException notFoundException) {
+                logger.error("Required resource not found in get user service: " + userName, notFoundException.getMessage());
+                break;
+            } catch (Exception exception) {
+                logger.error("Unexpected error in get user data: " + userName, exception.getMessage());
+                break;
+            }
         }
-
-        Generator generator = DocumentGenerationFactory.create(userType, userName);
-        generator.generateUserActivity();
-        generator.generateUserData();
-        generator.generateUserPost();
-        generator.generateUserPayment();
+        if (success) {
+            Generator generator = DocumentGenerationFactory.create(userType, userName);
+            generator.generateUserActivity();
+            generator.generateUserData();
+            generator.generateUserPost();
+            generator.generateUserPayment();
+        }
+        else {
+            throw new NotFoundException("User Not Found in DB");
+        }
     }
 
     /**

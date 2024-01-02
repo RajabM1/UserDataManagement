@@ -35,7 +35,6 @@ public class PdfUserPostGeneration extends AbstractPdfDocumentGeneration {
         document.add(new Paragraph("Post Report \n"));
 
         for (Post post : userPost) {
-            document.add(new Paragraph("Post ID: " + post.getId()));
             document.add(new Paragraph("Title: " + post.getTitle()));
             document.add(new Paragraph("Body: " + post.getBody()));
             document.add(new Paragraph("Author: " + post.getAuthor()));
@@ -43,7 +42,6 @@ public class PdfUserPostGeneration extends AbstractPdfDocumentGeneration {
             document.add(new Paragraph("\n"));
         }
         logger.info("User post content added successfully for {}", userName);
-
     }
 
     /**

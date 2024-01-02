@@ -54,19 +54,16 @@ public abstract class AbstractPdfDocumentGeneration implements IDocumentGenerati
                 logger.info("Document generation successful for user: {}", userName);
                 success = true;
 
-            } catch (IOException ioException) {
-                logger.error("IO error during document generation: " + userName + " in " + getFileName(), ioException.getMessage());
-            } catch (SystemBusyException systemBusyException) {
-                logger.error("System busy while generating document: " + userName + " in " + getFileName(), systemBusyException.getMessage());
-            } catch (BadRequestException badRequestException) {
-                logger.error("Bad request in document generation: " + userName + " in " + getFileName(), badRequestException.getMessage());
-            } catch (NotFoundException notFoundException) {
-                logger.error("Required resource not found in document generation: " + userName + " in " + getFileName(), notFoundException.getMessage());
-            } catch (Exception exception) {
-                logger.error("Unexpected error in document generation: " + userName + " in " + getFileName(), exception.getMessage());
+            } catch (IOException | SystemBusyException e) {
+                logger.error("Error during document generation for user: {} in {}: {}", userName, fileName, e.getMessage(), e);
+            } catch (BadRequestException | NotFoundException e) {
+                logger.error("Critical error in document generation for user: {} in {}: {}", userName, fileName, e.getMessage(), e);
+                break;
+            } catch (Exception e) {
+                logger.error("Unexpected error in document generation for user: {} in {}: {}", userName, fileName, e.getMessage(), e);
             }
             currentRetry++;
-            if (!success && currentRetry < maxRetries) {
+            if (!success) {
                 logger.info("Retrying document generation for user: {}, attempt: {}", userName, currentRetry);
             }
         }

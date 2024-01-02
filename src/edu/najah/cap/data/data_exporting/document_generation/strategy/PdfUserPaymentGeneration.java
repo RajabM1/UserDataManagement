@@ -41,10 +41,8 @@ public class PdfUserPaymentGeneration extends AbstractPdfDocumentGeneration {
             document.add(new Paragraph("Amount: " + transaction.getAmount()));
             document.add(new Paragraph("Description: " + transaction.getDescription()));
             document.add(new Paragraph("\n"));
-
         }
         logger.info("User payment content added successfully for {}", userName);
-
     }
 
     /**

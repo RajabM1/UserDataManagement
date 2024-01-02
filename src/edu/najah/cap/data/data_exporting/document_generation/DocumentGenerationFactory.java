@@ -24,18 +24,38 @@ public class DocumentGenerationFactory {
         return generator;
     }
 
+    /**
+     * Creates an instance of the user activity strategy for generating PDF documents.
+     *
+     * @return IDocumentGeneration instance specialized in user activity document generation.
+     */
     private static IDocumentGeneration createUserActivityStrategy() {
         return new PdfUserActivityGeneration();
     }
 
+    /**
+     * Creates an instance of the user data strategy for generating PDF documents.
+     *
+     * @return IDocumentGeneration instance specialized in user data document generation.
+     */
     private static IDocumentGeneration createUserDataStrategy() {
         return new PdfUserDataGeneration();
     }
 
+    /**
+     * Creates an instance of the user payment strategy for generating PDF documents.
+     *
+     * @return IDocumentGeneration instance specialized in user payment document generation.
+     */
     private static IDocumentGeneration createUserPaymentStrategy() {
         return new PdfUserPaymentGeneration();
     }
 
+    /**
+     * Creates an instance of the user post strategy for generating PDF documents.
+     *
+     * @return IDocumentGeneration instance specialized in user post document generation.
+     */
     private static IDocumentGeneration createUserPostStrategy() {
         return new PdfUserPostGeneration();
     }
