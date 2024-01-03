@@ -3,6 +3,14 @@ package edu.najah.cap.data;
 import edu.najah.cap.activity.IUserActivityService;
 import edu.najah.cap.activity.UserActivity;
 import edu.najah.cap.activity.UserActivityService;
+import edu.najah.cap.data.data_deletion.*;
+import edu.najah.cap.data.data_exporting.helpers.LoggerConfig;
+import edu.najah.cap.data.data_exporting.template.DataExportingTemplate;
+import edu.najah.cap.data.data_exporting.template.DownloadDirectOption;
+import edu.najah.cap.data.data_exporting.template.UploadToDriveOption;
+import edu.najah.cap.data.exceptions.DocumentGenerationException;
+import edu.najah.cap.data.login.Auth;
+import edu.najah.cap.exceptions.NotFoundException;
 import edu.najah.cap.exceptions.Util;
 import edu.najah.cap.iam.IUserService;
 import edu.najah.cap.iam.UserProfile;
@@ -17,7 +25,7 @@ import edu.najah.cap.posts.PostService;
 
 import java.time.Instant;
 import java.util.Scanner;
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.CompletableFuture;
 
 public class Application {
 
@@ -39,9 +47,88 @@ public class Application {
         setLoginUserName(userName);
         //TODO Your application starts here. Do not Change the existing code
 
+        LoggerConfig.setLoggerConfig();
+        userName = Auth.logIn(userName);
+        setLoginUserName(userName);
+        System.out.println("1. Export Data & Download Direct");
+        System.out.println("2. Export Data & Upload To Drive");
+        System.out.println("3. Soft Delete");
+        System.out.println("4. Hard Delete");
+        System.out.println("0 to exit");
+
+        System.out.println("Enter Your Choice: ");
+        int choice = 0;
+        choice = scanner.nextInt();
 
 
+        IDelete userActivityDelete = new UserActivityDelete(userActivityService);
+        IDelete userDataDelete = new UserDataDelete(userService);
+        IDelete userPaymentDelete = new UserPaymentDelete(paymentService);
+        IDelete userPostDelete = new UserPostDelete(postService);
 
+        DataDeletionFactory deletionFactory = new DataDeletionFactory(
+                userService,
+                userActivityDelete,
+                userDataDelete,
+                userPaymentDelete,
+                userPostDelete
+        );
+
+        while (choice != 0) {
+            switch (choice) {
+                case 1:
+                    DataExportingTemplate dataDownloadingTemplate = new DownloadDirectOption();
+                    try {
+                        dataDownloadingTemplate.export(userName);
+                    } catch (NotFoundException e) {
+                        userName = Auth.logIn(userName);
+                        setLoginUserName(userName);
+                    } catch (DocumentGenerationException e) {
+                        System.out.println("Failed to generate document please try again later");
+                    }
+                    break;
+                case 2:
+                    DataExportingTemplate dataUploadingTemplate = new UploadToDriveOption();
+                    try {
+                        dataUploadingTemplate.export(userName);
+                    } catch (NotFoundException e) {
+                        userName = Auth.logIn(userName);
+                        setLoginUserName(userName);
+                    } catch (DocumentGenerationException e) {
+                        System.out.println("Failed to generate document please try again later");
+                    }
+                    break;
+                case 3:
+                    try {
+                        DataDeletionContext deletionContext = deletionFactory.createDeletionContext(userName, false);
+                        CompletableFuture<Void> deletionFuture = deletionContext.delete();
+
+                        deletionFuture.join();
+                    } catch (Exception e) {
+                        System.out.println("Exception " + e);
+                    }
+                    break;
+                case 4:
+                    try {
+                        DataDeletionContext deletionContext = deletionFactory.createDeletionContext(userName, true);
+                        CompletableFuture<Void> deletionFuture = deletionContext.delete();
+
+                        deletionFuture.join();
+                    } catch (Exception e) {
+                        System.out.println("Exception " + e);
+                    } finally {
+                        userName = Auth.logIn(userName);
+                        setLoginUserName(userName);
+                        System.out.println("Session expired please login again");
+                    }
+                    break;
+                default:
+                    System.out.println("Invalid Choice");
+                    break;
+            }
+            System.out.println("\nEnter Your Choice: ");
+            choice = scanner.nextInt();
+        }
 
         //TODO Your application ends here. Do not Change the existing code
         Instant end = Instant.now();
