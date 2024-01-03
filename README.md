@@ -49,6 +49,38 @@ Document Generation & compressing files
 
 
 
+
+
+# Dana
+
+Depends on the requirements there are two types of deletion which are soft and hard delete ,
+while the process of delete is same to document generation because it depends on user type .
+I made this feature implementation like document generation implementation , so i used strategy design pattern and factory .
+
+First I created an **[IDelete]** interface to allow different implementation without changing existing code by
+apply it lead to **[open/close principle]**
+
+then I implement abstract class **[BaseDataDelete]**
+
+I created 4 classes: **[UserActivityDelete]** , **[UserDataDelete]** , **[UserPaymentDelete]**, and **[UserPostDelete]**
+to be able each class has its own implementation .
+
+then i made **[DataDeletionContext]** to call deletion strategies
+and i implement **[DataDeletionFactory]** to create data deletion context depend on user type .
+
+
+
+*note * the class diagrams are in folder class_diagrams 
+
+
+
+
+
 ![](https://up6.cc/2024/01/170431527894821.png)
+
+
+
+
+
 
 
