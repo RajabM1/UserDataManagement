@@ -57,6 +57,11 @@ public abstract class DataExportingTemplate {
             } catch (SystemBusyException systemBusyException) {
                 logger.error("System busy while get user data: " + userName, systemBusyException.getMessage());
                 retryCount++;
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
             } catch (BadRequestException badRequestException) {
                 logger.error("Bad request in get user service: " + userName, badRequestException.getMessage());
                 break;
@@ -74,8 +79,7 @@ public abstract class DataExportingTemplate {
             generator.generateUserData();
             generator.generateUserPost();
             generator.generateUserPayment();
-        }
-        else {
+        }else {
             throw new NotFoundException("User Not Found in DB");
         }
     }
