@@ -20,9 +20,9 @@ public class UploadToDriveOption extends DataExportingTemplate {
             DeletionHelper.delete(GetPathsHelper.getFilesPathsList(".zip"));
             logger.info("Data uploaded successfully to drive.");
         } catch (IOException ioException) {
-            logger.error("Error while trying to upload to drive, folder not found. " + ioException.getMessage());
+            logger.error("Error while trying to upload to drive, folder not found : " + ioException.getMessage());
         } catch (Exception exception) {
-            logger.error("Unexpected error while trying to upload to drive. " + exception.getMessage());
+            logger.error("Unexpected error while trying to upload to drive : " + exception.getMessage());
         }
     }
 }

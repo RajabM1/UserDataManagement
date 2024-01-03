@@ -19,8 +19,11 @@ public class DownloadDirectOption extends DataExportingTemplate {
             Path renamedDestinationPath = destinationFolder.resolve("renamed_file_" + timestamp + ".zip");
             Files.move(sourcePath, renamedDestinationPath);
             logger.info("File downloaded successfully to: " + renamedDestinationPath);
-        }  catch (IOException e) {
-            System.err.println("Error occurred while downloading the file: " + e.getMessage());
+            System.out.println("File downloaded successfully to: " + renamedDestinationPath);
+        }  catch (IOException ioException) {
+            logger.error("Error occurred while downloading the file : " + ioException.getMessage());
+        } catch (Exception exception) {
+            logger.error("Unexpected error while downloading the file : " + exception.getMessage());
         }
     }
 }
