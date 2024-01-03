@@ -4,7 +4,6 @@ import edu.najah.cap.data.data_exporting.compress.Compressor;
 import edu.najah.cap.data.data_exporting.compress.ZipCompressedStrategy;
 import edu.najah.cap.data.data_exporting.document_generation.DocumentGenerationFactory;
 import edu.najah.cap.data.data_exporting.document_generation.Generator;
-import edu.najah.cap.data.data_exporting.document_generation.strategy.AbstractPdfDocumentGeneration;
 import edu.najah.cap.data.data_exporting.helpers.GetPathsHelper;
 import edu.najah.cap.data.exceptions.DocumentGenerationException;
 import edu.najah.cap.exceptions.BadRequestException;
@@ -38,7 +37,7 @@ public abstract class DataExportingTemplate {
             generatePdf(userName);
             compressPdf();
             upload();
-        }catch (DocumentGenerationException e){
+        } catch (DocumentGenerationException e) {
             logger.error("Error in document generation for user: {}. Halting export process.", userName, e);
             throw e;
         }
@@ -51,7 +50,7 @@ public abstract class DataExportingTemplate {
      * @param userName the username associated with the user to generate the PDF for.
      * @throws NotFoundException if the user data is not found in the system after retries.
      */
-    protected void generatePdf(String userName) throws NotFoundException , DocumentGenerationException {
+    protected void generatePdf(String userName) throws NotFoundException, DocumentGenerationException {
         UserType userType = null;
         boolean success = false;
         int retryCount = 0;
@@ -86,7 +85,7 @@ public abstract class DataExportingTemplate {
             generator.generateUserData();
             generator.generateUserPost();
             generator.generateUserPayment();
-        }else {
+        } else {
             throw new NotFoundException("User Not Found in DB");
         }
     }

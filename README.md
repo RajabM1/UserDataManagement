@@ -21,4 +21,4 @@ I think these implementation is good because it follows the **[Solid Design Prin
 - code allows for extension without modifying existing code and this achieve **[Open/Closed Principle (OCP)]**
 
 
-![](https://www.raed.net/img?id=570586)
+![](https://up6.cc/2024/01/170431527894821.png)

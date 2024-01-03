@@ -20,7 +20,7 @@ public class DownloadDirectOption extends DataExportingTemplate {
             Files.move(sourcePath, renamedDestinationPath);
             logger.info("File downloaded successfully to: " + renamedDestinationPath);
             System.out.println("File downloaded successfully to: " + renamedDestinationPath);
-        }  catch (IOException ioException) {
+        } catch (IOException ioException) {
             logger.error("Error occurred while downloading the file : " + ioException.getMessage());
         } catch (Exception exception) {
             logger.error("Unexpected error while downloading the file : " + exception.getMessage());
