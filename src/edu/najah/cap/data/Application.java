@@ -104,6 +104,8 @@ public class Application {
                         CompletableFuture<Void> deletionFuture = deletionContext.delete();
 
                         deletionFuture.join();
+                        System.out.println("data deleted successfully ");
+
                     } catch (Exception e) {
                         System.out.println("Exception " + e);
                     }
@@ -114,12 +116,14 @@ public class Application {
                         CompletableFuture<Void> deletionFuture = deletionContext.delete();
 
                         deletionFuture.join();
+                        System.out.println("data deleted successfully ");
+
                     } catch (Exception e) {
                         System.out.println("Exception " + e);
                     } finally {
+                        System.out.println("Session expired please login again");
                         userName = Auth.logIn(userName);
                         setLoginUserName(userName);
-                        System.out.println("Session expired please login again");
                     }
                     break;
                 default:

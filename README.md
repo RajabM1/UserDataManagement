@@ -70,7 +70,7 @@ and i implement **[DataDeletionFactory]** to create data deletion context depend
 
 
 
-*note * the class diagrams are in folder class_diagrams 
+*note* the class diagrams are in folder class_diagrams 
 
 
 
