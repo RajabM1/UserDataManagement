@@ -8,11 +8,8 @@ import edu.najah.cap.exceptions.SystemBusyException;
 import edu.najah.cap.iam.IUserService;
 import edu.najah.cap.iam.UserProfile;
 import edu.najah.cap.iam.UserService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class PdfUserDataGeneration extends AbstractPdfDocumentGeneration {
-    private static final Logger logger = LoggerFactory.getLogger(PdfUserDataGeneration.class);
 
     private static final IUserService userService = new UserService();
 

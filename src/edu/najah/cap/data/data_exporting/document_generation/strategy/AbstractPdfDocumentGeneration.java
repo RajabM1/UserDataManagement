@@ -5,6 +5,7 @@ import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
 import edu.najah.cap.data.data_exporting.helpers.DeletionHelper;
 import edu.najah.cap.data.data_exporting.helpers.GetPathsHelper;
+import edu.najah.cap.data.exceptions.DocumentGenerationException;
 import edu.najah.cap.exceptions.BadRequestException;
 import edu.najah.cap.exceptions.NotFoundException;
 import edu.najah.cap.exceptions.SystemBusyException;
@@ -16,7 +17,8 @@ import java.io.IOException;
 import static java.lang.System.exit;
 
 public abstract class AbstractPdfDocumentGeneration implements IDocumentGeneration {
-    private static final Logger logger = LoggerFactory.getLogger(AbstractPdfDocumentGeneration.class);
+
+    protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
      * Adds content to the PDF document. This method is to be implemented by subclasses
@@ -37,8 +39,8 @@ public abstract class AbstractPdfDocumentGeneration implements IDocumentGenerati
      * @param userName The username for whom the document is generated.
      */
     @Override
-    public void generateDocument(String userName) {
-        int maxRetries = 3;
+    public void generateDocument(String userName) throws DocumentGenerationException {
+        int maxRetries = 4;
         int currentRetry = 0;
         boolean success = false;
 
@@ -56,6 +58,11 @@ public abstract class AbstractPdfDocumentGeneration implements IDocumentGenerati
 
             } catch (IOException | SystemBusyException e) {
                 logger.error("Error during document generation for user: {} in {}: {}", userName, fileName, e.getMessage(), e);
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException ex) {
+                    throw new RuntimeException(ex);
+                }
             } catch (BadRequestException | NotFoundException e) {
                 logger.error("Critical error in document generation for user: {} in {}: {}", userName, fileName, e.getMessage(), e);
                 break;
@@ -72,9 +79,9 @@ public abstract class AbstractPdfDocumentGeneration implements IDocumentGenerati
             try {
                 DeletionHelper.delete(GetPathsHelper.getFilesPathsList(".pdf"));
             } catch (IOException ioException) {
-                logger.error("IO error during deleting pdf files: " + userName + " in " + getFileName(), ioException.getMessage());
+                logger.error("IO error during deleting pdf files: {} in {}: {} ", userName, getFileName(), ioException.getMessage());
             }
-            exit(1);
+            throw new DocumentGenerationException("Failed to generate document for user: " + userName);
         }
     }
 

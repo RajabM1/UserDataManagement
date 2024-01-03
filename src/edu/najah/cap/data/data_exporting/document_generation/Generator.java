@@ -1,7 +1,7 @@
 package edu.najah.cap.data.data_exporting.document_generation;
 
 import edu.najah.cap.data.data_exporting.document_generation.strategy.IDocumentGeneration;
-import edu.najah.cap.exceptions.NotFoundException;
+import edu.najah.cap.data.exceptions.DocumentGenerationException;
 
 public class Generator {
     private final IDocumentGeneration userActivity;
@@ -30,7 +30,7 @@ public class Generator {
     /**
      * Generates a document detailing the user's activities.
      */
-    public final void generateUserActivity() {
+    public final void generateUserActivity() throws DocumentGenerationException {
         if (userActivity != null) {
             userActivity.generateDocument(userName);
         }
@@ -39,7 +39,7 @@ public class Generator {
     /**
      * Generates a document containing the user's data.
      */
-    public final void generateUserData() {
+    public final void generateUserData() throws DocumentGenerationException {
         if (userData != null) {
             userData.generateDocument(userName);
         }
@@ -48,7 +48,7 @@ public class Generator {
     /**
      * Generates a document with the user's payment information.
      */
-    public final void generateUserPayment() {
+    public final void generateUserPayment() throws DocumentGenerationException {
         if (userPayment != null) {
             userPayment.generateDocument(userName);
         }
@@ -57,7 +57,7 @@ public class Generator {
     /**
      * Generates a document with the user's posts.
      */
-    public final void generateUserPost() {
+    public final void generateUserPost() throws DocumentGenerationException {
         if (userPost != null) {
             userPost.generateDocument(userName);
         }

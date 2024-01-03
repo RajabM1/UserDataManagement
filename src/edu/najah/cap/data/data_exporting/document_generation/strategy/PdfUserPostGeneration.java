@@ -8,14 +8,11 @@ import edu.najah.cap.exceptions.SystemBusyException;
 import edu.najah.cap.posts.IPostService;
 import edu.najah.cap.posts.Post;
 import edu.najah.cap.posts.PostService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import java.time.Instant;
 import java.util.List;
 
 public class PdfUserPostGeneration extends AbstractPdfDocumentGeneration {
-    private static final Logger logger = LoggerFactory.getLogger(PdfUserPostGeneration.class);
-
     private static final IPostService postService = new PostService();
 
     /**

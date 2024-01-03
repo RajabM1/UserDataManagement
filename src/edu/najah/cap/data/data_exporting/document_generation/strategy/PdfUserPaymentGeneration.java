@@ -8,13 +8,10 @@ import edu.najah.cap.exceptions.SystemBusyException;
 import edu.najah.cap.payment.IPayment;
 import edu.najah.cap.payment.PaymentService;
 import edu.najah.cap.payment.Transaction;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 public class PdfUserPaymentGeneration extends AbstractPdfDocumentGeneration {
-    private static final Logger logger = LoggerFactory.getLogger(PdfUserPaymentGeneration.class);
 
     private static final IPayment paymentService = new PaymentService();
 

@@ -8,13 +8,10 @@ import edu.najah.cap.activity.UserActivityService;
 import edu.najah.cap.exceptions.BadRequestException;
 import edu.najah.cap.exceptions.NotFoundException;
 import edu.najah.cap.exceptions.SystemBusyException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 public class PdfUserActivityGeneration extends AbstractPdfDocumentGeneration {
-    private static final Logger logger = LoggerFactory.getLogger(PdfUserActivityGeneration.class);
     private static final IUserActivityService userActivityService = new UserActivityService();
 
     /**

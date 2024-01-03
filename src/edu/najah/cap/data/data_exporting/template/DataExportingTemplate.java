@@ -6,6 +6,7 @@ import edu.najah.cap.data.data_exporting.document_generation.DocumentGenerationF
 import edu.najah.cap.data.data_exporting.document_generation.Generator;
 import edu.najah.cap.data.data_exporting.document_generation.strategy.AbstractPdfDocumentGeneration;
 import edu.najah.cap.data.data_exporting.helpers.GetPathsHelper;
+import edu.najah.cap.data.exceptions.DocumentGenerationException;
 import edu.najah.cap.exceptions.BadRequestException;
 import edu.najah.cap.exceptions.NotFoundException;
 import edu.najah.cap.exceptions.SystemBusyException;
@@ -32,10 +33,16 @@ public abstract class DataExportingTemplate {
      *
      * @param userName The username for which data is to be exported.
      */
-    public final void export(String userName) throws NotFoundException {
-        generatePdf(userName);
-        compressPdf();
-        upload();
+    public final void export(String userName) throws NotFoundException, DocumentGenerationException {
+        try {
+            generatePdf(userName);
+            compressPdf();
+            upload();
+        }catch (DocumentGenerationException e){
+            logger.error("Error in document generation for user: {}. Halting export process.", userName, e);
+            throw e;
+        }
+
     }
 
     /**
@@ -44,7 +51,7 @@ public abstract class DataExportingTemplate {
      * @param userName the username associated with the user to generate the PDF for.
      * @throws NotFoundException if the user data is not found in the system after retries.
      */
-    protected void generatePdf(String userName) throws NotFoundException {
+    protected void generatePdf(String userName) throws NotFoundException , DocumentGenerationException {
         UserType userType = null;
         boolean success = false;
         int retryCount = 0;
